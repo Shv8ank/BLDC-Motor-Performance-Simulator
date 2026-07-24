@@ -1,7 +1,14 @@
+"""
+Core engineering calculations for the BLDC Motor Performance Simulator.
+"""
+
 from math import pi
 
 
-def calculate_electrical_power(voltage: float, current: float) -> float:
+def calculate_electrical_power(
+    voltage: float,
+    current: float,
+) -> float:
     """
     Calculate electrical input power.
 
@@ -18,9 +25,12 @@ def calculate_electrical_power(voltage: float, current: float) -> float:
     return voltage * current
 
 
-def calculate_motor_rpm(voltage: float, kv_constant: float) -> float:
+def calculate_motor_rpm(
+    voltage: float,
+    kv_constant: float,
+) -> float:
     """
-    Calculate ideal no-load motor speed.
+    Calculate no-load motor speed.
 
     Formula:
         RPM = KV × Voltage
@@ -35,12 +45,14 @@ def calculate_motor_rpm(voltage: float, kv_constant: float) -> float:
     return voltage * kv_constant
 
 
-def calculate_angular_velocity(rpm: float) -> float:
+def calculate_angular_velocity(
+    rpm: float,
+) -> float:
     """
     Convert RPM to angular velocity.
 
     Formula:
-        ω = 2π × RPM / 60
+        ω = (2π × RPM) / 60
 
     Args:
         rpm: Motor speed (RPM)
@@ -49,3 +61,46 @@ def calculate_angular_velocity(rpm: float) -> float:
         Angular velocity (rad/s)
     """
     return (2 * pi * rpm) / 60
+
+
+def calculate_mechanical_power(
+    electrical_power: float,
+    motor_efficiency: float,
+) -> float:
+    """
+    Calculate mechanical output power.
+
+    Formula:
+        P_mechanical = P_electrical × η
+
+    Args:
+        electrical_power: Electrical input power (W)
+        motor_efficiency: Motor efficiency (0-1)
+
+    Returns:
+        Mechanical output power (W)
+    """
+    return electrical_power * motor_efficiency
+
+
+def calculate_torque(
+    mechanical_power: float,
+    angular_velocity: float,
+) -> float:
+    """
+    Calculate motor torque.
+
+    Formula:
+        T = P / ω
+
+    Args:
+        mechanical_power: Mechanical output power (W)
+        angular_velocity: Angular velocity (rad/s)
+
+    Returns:
+        Motor torque (N·m)
+    """
+    if angular_velocity == 0:
+        return 0.0
+
+    return mechanical_power / angular_velocity
