@@ -1,13 +1,23 @@
-from src.models.motor import MotorParameters
+"""
+Data model for BLDC motor input parameters.
+"""
+
+from dataclasses import dataclass
 
 
-motor = MotorParameters(
-    rated_voltage=48,
-    rated_current=30,
-    kv_constant=320,
-    pole_pairs=15,
-    wheel_diameter=0.45,
-    vehicle_mass=160,
-)
+@dataclass(slots=True)
+class MotorParameters:
+    """
+    Stores all input parameters required for a BLDC motor simulation.
+    """
 
-print(motor)
+    rated_voltage: float
+    rated_current: float
+    kv_constant: float
+    pole_pairs: int
+    wheel_diameter: float
+    vehicle_mass: float
+
+    gear_ratio: float = 1.0
+    controller_efficiency: float = 0.95
+    motor_efficiency: float = 0.90
