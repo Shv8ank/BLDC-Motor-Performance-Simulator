@@ -11,16 +11,6 @@ def calculate_electrical_power(
 ) -> float:
     """
     Calculate electrical input power.
-
-    Formula:
-        P = V × I
-
-    Args:
-        voltage: Supply voltage (V)
-        current: Supply current (A)
-
-    Returns:
-        Electrical power (W)
     """
     return voltage * current
 
@@ -31,16 +21,6 @@ def calculate_motor_rpm(
 ) -> float:
     """
     Calculate no-load motor speed.
-
-    Formula:
-        RPM = KV × Voltage
-
-    Args:
-        voltage: Supply voltage (V)
-        kv_constant: Motor KV rating (RPM/V)
-
-    Returns:
-        Motor speed (RPM)
     """
     return voltage * kv_constant
 
@@ -50,15 +30,6 @@ def calculate_angular_velocity(
 ) -> float:
     """
     Convert RPM to angular velocity.
-
-    Formula:
-        ω = (2π × RPM) / 60
-
-    Args:
-        rpm: Motor speed (RPM)
-
-    Returns:
-        Angular velocity (rad/s)
     """
     return (2 * pi * rpm) / 60
 
@@ -69,16 +40,6 @@ def calculate_mechanical_power(
 ) -> float:
     """
     Calculate mechanical output power.
-
-    Formula:
-        P_mechanical = P_electrical × η
-
-    Args:
-        electrical_power: Electrical input power (W)
-        motor_efficiency: Motor efficiency (0-1)
-
-    Returns:
-        Mechanical output power (W)
     """
     return electrical_power * motor_efficiency
 
@@ -89,18 +50,75 @@ def calculate_torque(
 ) -> float:
     """
     Calculate motor torque.
-
-    Formula:
-        T = P / ω
-
-    Args:
-        mechanical_power: Mechanical output power (W)
-        angular_velocity: Angular velocity (rad/s)
-
-    Returns:
-        Motor torque (N·m)
     """
     if angular_velocity == 0:
         return 0.0
 
     return mechanical_power / angular_velocity
+
+
+def calculate_wheel_rpm(
+    motor_rpm: float,
+    gear_ratio: float,
+) -> float:
+    """
+    Calculate wheel RPM after gear reduction.
+    """
+    if gear_ratio <= 0:
+        raise ValueError("Gear ratio must be greater than zero.")
+
+    return motor_rpm / gear_ratio
+
+
+def calculate_vehicle_speed(
+    wheel_rpm: float,
+    wheel_diameter: float,
+) -> float:
+    """
+    Calculate vehicle speed in km/h.
+
+    Args:
+        wheel_rpm: Wheel speed (RPM)
+        wheel_diameter: Wheel diameter (m)
+
+    Returns:
+        Vehicle speed (km/h)
+    """
+    circumference = pi * wheel_diameter
+    speed_m_per_min = wheel_rpm * circumference
+    speed_km_per_hr = (speed_m_per_min * 60) / 1000
+
+    return speed_km_per_hr
+
+
+def calculate_wheel_force(
+    torque: float,
+    wheel_diameter: float,
+) -> float:
+    """
+    Calculate force available at the tyre.
+
+    Args:
+        torque: Motor torque (N·m)
+        wheel_diameter: Wheel diameter (m)
+
+    Returns:
+        Wheel force (N)
+    """
+    radius = wheel_diameter / 2
+
+    if radius == 0:
+        return 0.0
+
+    return torque / radius
+
+
+def calculate_estimated_top_speed(
+    vehicle_speed: float,
+) -> float:
+    """
+    Initial top speed estimate.
+
+    Later this will include drag and rolling resistance.
+    """
+    return vehicle_speed
