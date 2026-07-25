@@ -4,6 +4,7 @@ Simulation engine for the BLDC Motor Performance Simulator.
 
 from src.models.motor import MotorParameters
 from src.models.results import SimulationResults
+from src.core.validators import validate_motor_parameters
 
 from src.core.calculations import (
     calculate_angular_velocity,
@@ -32,6 +33,7 @@ def simulate_motor(motor: MotorParameters) -> SimulationResults:
     SimulationResults
         Complete simulation results.
     """
+    validate_motor_parameters(motor)
 
     electrical_power = calculate_electrical_power(
         motor.rated_voltage,
