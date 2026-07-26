@@ -55,28 +55,19 @@ def simulate_motor(
         * motor.motor_efficiency
     )
 
-    mechanical_power = calculate_mechanical_power(
-        electrical_power,
-        overall_efficiency,
-    )
+    mechanical_power = motor.rated_power * motor.motor_efficiency
 
     # ------------------------------------------
     # Hub Motor Model
     # ------------------------------------------
 
-    motor_rpm = calculate_motor_rpm(
-        voltage=motor.rated_voltage,
-        kv_constant=motor.kv_constant,
-    )
+    motor_rpm = motor.rated_speed
 
     angular_velocity = calculate_angular_velocity(
         motor_rpm,
     )
 
-    motor_torque = calculate_torque(
-        mechanical_power,
-        angular_velocity,
-    )
+    motor_torque = motor.rated_torque
 
     # ------------------------------------------
     # Wheel Model

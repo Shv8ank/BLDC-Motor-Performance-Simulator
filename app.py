@@ -42,15 +42,23 @@ if selected_motor != "Custom":
     preset = MOTOR_PRESETS[selected_motor]
 else:
     preset = {
-        "rated_voltage": 48.0,
-        "rated_current": 30.0,
-        "kv_constant": 320.0,
-        "pole_pairs": 15,
-        "wheel_diameter": 0.30,
-        "vehicle_mass": 120.0,
+        "rated_voltage": 36.0,
+        "rated_current": 7.0,
+
+        "rated_power": 250.0,
+
+        "rated_speed": 260.0,
+        "max_speed": 300.0,
+
+        "rated_torque": 9.0,
+        "peak_torque": 18.0,
+
+        "wheel_diameter": 0.66,
+        "vehicle_mass": 100.0,
+
         "controller_efficiency": 0.95,
-        "motor_efficiency": 0.90,
-    }
+        "motor_efficiency": 0.88,
+    }    
 
 rated_voltage = st.sidebar.number_input(
     "Rated Voltage (V)",
@@ -66,20 +74,40 @@ rated_current = st.sidebar.number_input(
     disabled=not custom_edit,
 )
 
-kv_constant = st.sidebar.number_input(
-    "KV Constant (RPM/V)",
-    value=preset["kv_constant"],
+rated_power = st.sidebar.number_input(
+    "Rated Power (W)",
+    value=preset["rated_power"],
     min_value=1.0,
     disabled=not custom_edit,
 )
 
-pole_pairs = st.sidebar.number_input(
-    "Pole Pairs",
-    value=preset["pole_pairs"],
-    min_value=1,
+rated_speed = st.sidebar.number_input(
+    "Rated Speed (RPM)",
+    value=preset["rated_speed"],
+    min_value=1.0,
     disabled=not custom_edit,
 )
 
+max_speed = st.sidebar.number_input(
+    "Maximum Speed (RPM)",
+    value=preset["max_speed"],
+    min_value=1.0,
+    disabled=not custom_edit,
+)
+
+rated_torque = st.sidebar.number_input(
+    "Rated Torque (Nm)",
+    value=preset["rated_torque"],
+    min_value=0.1,
+    disabled=not custom_edit,
+)
+
+peak_torque = st.sidebar.number_input(
+    "Peak Torque (Nm)",
+    value=preset["peak_torque"],
+    min_value=0.1,
+    disabled=not custom_edit,
+)
 wheel_diameter = st.sidebar.number_input(
     "Wheel Diameter (m)",
     value=preset["wheel_diameter"],
@@ -164,10 +192,18 @@ if run:
         motor = MotorParameters(
             rated_voltage=rated_voltage,
             rated_current=rated_current,
-            kv_constant=kv_constant,
-            pole_pairs=pole_pairs,
+
+            rated_power=rated_power,
+
+            rated_speed=rated_speed,
+            max_speed=max_speed,
+
+            rated_torque=rated_torque,
+            peak_torque=peak_torque,
+
             wheel_diameter=wheel_diameter,
             vehicle_mass=vehicle_mass,
+
             controller_efficiency=controller_efficiency,
             motor_efficiency=motor_efficiency,
         )

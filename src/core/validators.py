@@ -1,5 +1,5 @@
 """
-Validation utilities for BLDC motor simulation.
+Validation utilities for the EV Hub Motor Performance Simulator.
 """
 
 from src.models.motor import MotorParameters
@@ -21,11 +21,20 @@ def validate_motor_parameters(motor: MotorParameters) -> None:
     if motor.rated_current <= 0:
         raise ValueError("Rated current must be greater than zero.")
 
-    if motor.kv_constant <= 0:
-        raise ValueError("KV constant must be greater than zero.")
+    if motor.rated_power <= 0:
+        raise ValueError("Rated power must be greater than zero.")
 
-    if motor.pole_pairs <= 0:
-        raise ValueError("Pole pairs must be greater than zero.")
+    if motor.rated_speed <= 0:
+        raise ValueError("Rated speed must be greater than zero.")
+
+    if motor.max_speed <= 0:
+        raise ValueError("Maximum speed must be greater than zero.")
+
+    if motor.rated_torque <= 0:
+        raise ValueError("Rated torque must be greater than zero.")
+
+    if motor.peak_torque <= 0:
+        raise ValueError("Peak torque must be greater than zero.")
 
     if motor.wheel_diameter <= 0:
         raise ValueError("Wheel diameter must be greater than zero.")
