@@ -33,9 +33,6 @@ def validate_motor_parameters(motor: MotorParameters) -> None:
     if motor.vehicle_mass <= 0:
         raise ValueError("Vehicle mass must be greater than zero.")
 
-    if motor.gear_ratio <= 0:
-        raise ValueError("Gear ratio must be greater than zero.")
-
     if not (0 < motor.controller_efficiency <= 1):
         raise ValueError(
             "Controller efficiency must be between 0 and 1."

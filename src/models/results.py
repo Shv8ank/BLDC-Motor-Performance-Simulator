@@ -8,7 +8,7 @@ from dataclasses import dataclass
 @dataclass(slots=True)
 class SimulationResults:
     """
-    Stores the complete output of a BLDC motor simulation.
+    Stores the complete output of a hub motor simulation.
     """
 
     electrical_power: float

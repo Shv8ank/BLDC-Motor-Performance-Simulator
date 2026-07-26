@@ -48,7 +48,6 @@ else:
         "pole_pairs": 15,
         "wheel_diameter": 0.30,
         "vehicle_mass": 120.0,
-        "gear_ratio": 1.0,
         "controller_efficiency": 0.95,
         "motor_efficiency": 0.90,
     }
@@ -92,13 +91,6 @@ vehicle_mass = st.sidebar.number_input(
     "Vehicle Mass (kg)",
     value=preset["vehicle_mass"],
     min_value=1.0,
-    disabled=not custom_edit,
-)
-
-gear_ratio = st.sidebar.number_input(
-    "Gear Ratio",
-    value=preset["gear_ratio"],
-    min_value=0.1,
     disabled=not custom_edit,
 )
 
@@ -176,7 +168,6 @@ if run:
             pole_pairs=pole_pairs,
             wheel_diameter=wheel_diameter,
             vehicle_mass=vehicle_mass,
-            gear_ratio=gear_ratio,
             controller_efficiency=controller_efficiency,
             motor_efficiency=motor_efficiency,
         )
@@ -226,7 +217,7 @@ if run:
         # Metrics
         # ==========================
 
-        row1 = st.columns(3)
+        row1 = st.columns(4)
 
         row1[0].metric(
             "⚡ Electrical Power",
@@ -243,26 +234,31 @@ if run:
             f"{results.torque:.2f} Nm",
         )
 
-        row2 = st.columns(3)
+        row2 = st.columns(4)
 
         row2[0].metric(
-            "🚗 Theoretical No-Load Speed",
-            f"{results.vehicle_speed:.2f} km/h",
+             "🚗 Wheel RPM",
+            f"{results.wheel_rpm:.0f}",
         )
 
         row2[1].metric(
+            "🚙 Vehicle Speed",
+            f"{results.vehicle_speed:.2f} km/h",
+        )
+
+        row2[2].metric(
             "⚙️ Wheel Force",
             f"{results.wheel_force:.2f} N",
         )
 
-        row2[2].metric(
+        row2[3].metric(
             "✅ Overall Efficiency",
             f"{results.overall_efficiency * 100:.1f} %",
         )
 
         st.info(
-            "Theoretical no-load speed assumes ideal operating conditions "
-            "without aerodynamic drag, rolling resistance, or current limits."
+            "Vehicle speed is the theoretical no-load speed calculated from hub motor RPM and wheel diameter. "
+            "Actual road speed is lower due to aerodynamic drag, rolling resistance, road gradient, controller limits and load."
         )
 
         st.divider()

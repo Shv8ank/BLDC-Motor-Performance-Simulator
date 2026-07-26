@@ -56,18 +56,19 @@ def calculate_torque(
 
     return mechanical_power / angular_velocity
 
-
-def calculate_wheel_rpm(
-    motor_rpm: float,
-    gear_ratio: float,
+def calculate_wheel_force(
+    torque: float,
+    wheel_diameter: float,
 ) -> float:
     """
-    Calculate wheel RPM after gear reduction.
+    Calculate tractive force at the wheel.
     """
-    if gear_ratio <= 0:
-        raise ValueError("Gear ratio must be greater than zero.")
+    wheel_radius = wheel_diameter / 2
 
-    return motor_rpm / gear_ratio
+    if wheel_radius == 0:
+        return 0.0
+
+    return torque / wheel_radius
 
 
 def calculate_vehicle_speed(
@@ -75,50 +76,15 @@ def calculate_vehicle_speed(
     wheel_diameter: float,
 ) -> float:
     """
-    Calculate vehicle speed in km/h.
-
-    Args:
-        wheel_rpm: Wheel speed (RPM)
-        wheel_diameter: Wheel diameter (m)
-
-    Returns:
-        Vehicle speed (km/h)
+    Calculate theoretical vehicle speed (km/h).
     """
-    circumference = pi * wheel_diameter
-    speed_m_per_min = wheel_rpm * circumference
-    speed_km_per_hr = (speed_m_per_min * 60) / 1000
+    wheel_circumference = pi * wheel_diameter
 
-    return speed_km_per_hr
+    speed_m_per_min = wheel_rpm * wheel_circumference
 
+    speed_km_per_h = (speed_m_per_min * 60) / 1000
 
-def calculate_wheel_force(
-    torque: float,
-    wheel_diameter: float,
-) -> float:
-    """
-    Calculate force available at the tyre.
-
-    Args:
-        torque: Motor torque (N·m)
-        wheel_diameter: Wheel diameter (m)
-
-    Returns:
-        Wheel force (N)
-    """
-    radius = wheel_diameter / 2
-
-    if radius == 0:
-        return 0.0
-
-    return torque / radius
+    return speed_km_per_h
 
 
-def calculate_estimated_top_speed(
-    vehicle_speed: float,
-) -> float:
-    """
-    Initial top speed estimate.
 
-    Later this will include drag and rolling resistance.
-    """
-    return vehicle_speed
