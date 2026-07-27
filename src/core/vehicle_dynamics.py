@@ -124,17 +124,19 @@ def net_force(
     grade_force: float,
 ) -> float:
     """
-    Calculates the remaining force available for acceleration.
+    Calculates the net tractive force acting on the vehicle.
+
+    Positive value  -> Vehicle can accelerate
+    Zero            -> Vehicle is in equilibrium
+    Negative value  -> Available wheel force is insufficient
     """
 
-    return max(
-        0.0,
+    return (
         tractive_force
         - rolling_force
         - drag_force
-        - grade_force,
+        - grade_force
     )
-
 
 # ==========================================================
 # Vehicle Acceleration
@@ -193,4 +195,4 @@ def estimate_top_speed(
         )
     )
 
-    return speed * 3.6
+    return speed * 3.6  

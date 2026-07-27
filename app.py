@@ -12,14 +12,14 @@ from src.core.vehicle_dynamics import *
 
 
 st.set_page_config(
-    page_title="BLDC Motor Performance Simulator",
+    page_title="EV Hub Motor Performance Simulator",
     page_icon="⚡",
     layout="wide",
 )
 
-st.title("⚡ BLDC Motor Performance Simulator")
+st.title("⚡ EV Hub Motor Performance Simulator")
 st.caption(
-    "Interactive performance estimation for BLDC motors used in electric vehicles."
+    "Interactive performance estimation for direct-drive electric hub motors used in electric vehicles."
 )
 
 # ==========================
@@ -245,7 +245,7 @@ if run:
         )
 
         power_weight = (
-            results.mechanical_power
+            motor.rated_power
             / vehicle_mass
         )
 
@@ -262,7 +262,7 @@ if run:
 
         row1[1].metric(
             "🔄 Motor RPM",
-            f"{results.motor_rpm:.0f}",
+            f"{results.motor_rpm:.0f} RPM",
         )
 
         row1[2].metric(
@@ -274,16 +274,16 @@ if run:
 
         row2[0].metric(
              "🚗 Wheel RPM",
-            f"{results.wheel_rpm:.0f}",
+            f"{results.wheel_rpm:.0f} RPM",
         )
 
         row2[1].metric(
-            "🚙 Vehicle Speed",
+            "🚙 Theoretical No-Load Speed",
             f"{results.vehicle_speed:.2f} km/h",
         )
 
         row2[2].metric(
-            "⚙️ Wheel Force",
+            "⚙️ Tractive Force",
             f"{results.wheel_force:.2f} N",
         )
 
@@ -293,8 +293,8 @@ if run:
         )
 
         st.info(
-            "Vehicle speed is the theoretical no-load speed calculated from hub motor RPM and wheel diameter. "
-            "Actual road speed is lower due to aerodynamic drag, rolling resistance, road gradient, controller limits and load."
+            "The theoretical no-load speed is calculated from motor speed and wheel diameter. "
+            "Actual vehicle speed depends on tractive force, aerodynamic drag, rolling resistance, road gradient, controller limits, battery condition and vehicle load."
         )
 
         st.divider()
@@ -335,16 +335,48 @@ if run:
 
         if selected_motor != "Custom":
 
-            st.subheader("Motor Information")
+            st.subheader("📋 Motor Specifications")
 
-            col1, col2 = st.columns(2)
+            left, right = st.columns(2)
 
-            with col1:
-                st.write(f"**Power Rating:** {preset['power']}")
-                st.write(f"**Application:** {preset['application']}")
+            with left:
+                st.metric(
+                    "Rated Voltage",
+                    f"{motor.rated_voltage:.0f} V",
+                )
 
-            with col2:
-                st.write("**Description:**")
+                st.metric(
+                    "Rated Current",
+                    f"{motor.rated_current:.1f} A",
+                )
+
+                st.metric(
+                    "Rated Power",
+                    f"{motor.rated_power:.0f} W",
+                )
+
+                st.metric(
+                    "Rated Torque",
+                    f"{motor.rated_torque:.2f} Nm",
+                )
+
+            with right:
+                st.metric(
+                    "Peak Torque",
+                    f"{motor.peak_torque:.2f} Nm",
+                )
+
+                st.metric(
+                    "Rated Speed",
+                    f"{motor.rated_speed:.0f} RPM",
+                )
+
+                st.metric(
+                    "Maximum Speed",
+                    f"{motor.max_speed:.0f} RPM",
+                )
+
+                st.write("**Description**")
                 st.write(preset["description"])
 
         st.divider()
@@ -365,10 +397,16 @@ if run:
                 f"{available_force:.2f} N",
             )
 
-            st.metric(
-                "Acceleration",
-                f"{vehicle_acceleration:.2f} m/s²",
-            )
+            if vehicle_acceleration >= 0:
+                st.metric(
+                    "Acceleration",
+                    f"{vehicle_acceleration:.2f} m/s²",
+                )
+            else:
+                st.metric(
+                    "Deceleration",
+                    f"{abs(vehicle_acceleration):.2f} m/s²",
+                )
 
         with right:
 
@@ -383,7 +421,7 @@ if run:
             )
 
             st.metric(
-                "Estimated Top Speed",
+                "Aerodynamic-Limited Top Speed",
                 f"{estimated_top_speed:.2f} km/h",
             )
     except Exception as e:
