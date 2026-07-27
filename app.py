@@ -142,12 +142,15 @@ st.sidebar.subheader("Battery")
 
 battery_voltage = st.sidebar.number_input(
     "Battery Voltage (V)",
-    value=48.0,
+    value=preset["battery_voltage"],
+    disabled=not custom_edit,
 )
 
 battery_capacity = st.sidebar.number_input(
     "Battery Capacity (Ah)",
-    value=20.0,
+    value=preset["battery_capacity"],
+    min_value=1.0,
+    disabled=not custom_edit,
 )
 
 st.sidebar.subheader("Vehicle Dynamics")
@@ -204,8 +207,12 @@ if run:
             wheel_diameter=wheel_diameter,
             vehicle_mass=vehicle_mass,
 
+            battery_voltage=battery_voltage,
+            battery_capacity=battery_capacity,
+
             controller_efficiency=controller_efficiency,
             motor_efficiency=motor_efficiency,
+
         )
 
         results = simulate_motor(motor)

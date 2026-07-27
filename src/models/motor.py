@@ -8,14 +8,17 @@ class MotorParameters:
 
     rated_power: float
 
-    rated_speed: float      # RPM
-    max_speed: float        # RPM
+    rated_speed: float
+    max_speed: float
 
-    rated_torque: float     # Nm
-    peak_torque: float      # Nm
+    rated_torque: float
+    peak_torque: float
 
     wheel_diameter: float
     vehicle_mass: float
+
+    battery_voltage: float
+    battery_capacity: float
 
     controller_efficiency: float
     motor_efficiency: float

@@ -13,6 +13,9 @@ MOTOR_PRESETS = {
         "wheel_diameter": 0.66,
         "vehicle_mass": 100.0,
 
+        "battery_voltage": 36.0,
+        "battery_capacity": 10.0,
+
         "controller_efficiency": 0.95,
         "motor_efficiency": 0.88,
 
@@ -34,6 +37,9 @@ MOTOR_PRESETS = {
 
         "wheel_diameter": 0.70,
         "vehicle_mass": 120.0,
+
+        "battery_voltage": 48.0,
+        "battery_capacity": 15.0,
 
         "controller_efficiency": 0.95,
         "motor_efficiency": 0.90,
@@ -57,6 +63,9 @@ MOTOR_PRESETS = {
         "wheel_diameter": 0.48,
         "vehicle_mass": 150.0,
 
+        "battery_voltage": 60.0,
+        "battery_capacity": 25.0,
+
         "controller_efficiency": 0.96,
         "motor_efficiency": 0.91,
 
@@ -78,6 +87,9 @@ MOTOR_PRESETS = {
 
         "wheel_diameter": 0.60,
         "vehicle_mass": 220.0,
+
+        "battery_voltage": 72.0,
+        "battery_capacity": 40.0,
 
         "controller_efficiency": 0.97,
         "motor_efficiency": 0.93,
