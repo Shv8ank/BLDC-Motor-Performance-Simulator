@@ -304,13 +304,17 @@ if run:
         # ==========================
 
         power_chart = create_power_curve(
-        results.motor_rpm,
-        results.torque,
+            motor.rated_speed,
+            motor.max_speed,
+            motor.rated_torque,
+            motor.peak_torque,
         )
 
         torque_chart = create_torque_curve(
-            results.motor_rpm,
-            results.torque,
+            motor.rated_speed,
+            motor.max_speed,
+            motor.rated_torque,
+            motor.peak_torque,
         )
 
         graph1, graph2 = st.columns(2)

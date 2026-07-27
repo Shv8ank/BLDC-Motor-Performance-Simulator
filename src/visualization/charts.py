@@ -3,62 +3,75 @@ import plotly.graph_objects as go
 
 
 def generate_motor_curves(
-    max_rpm: float,
-    max_torque: float,
-    base_speed_ratio: float = 0.60,
+    rated_speed: float,
+    max_speed: float,
+    rated_torque: float,
+    peak_torque: float,
     points: int = 300,
 ):
     """
-    Generate realistic BLDC motor characteristic curves.
+    Generate realistic EV hub motor torque-speed and power-speed curves.
 
-    Returns:
-        rpm, torque, power
+    Regions:
+    1. Constant peak torque
+    2. Torque tapers to rated torque
+    3. Constant power
     """
 
-    rpm = np.linspace(1, max_rpm, points)
-
-    base_rpm = max_rpm * base_speed_ratio
-
-    base_omega = (2 * np.pi * base_rpm) / 60
-
-    constant_power = max_torque * base_omega
+    rpm = np.linspace(0, max_speed, points)
 
     torque = np.zeros_like(rpm)
     power = np.zeros_like(rpm)
+
+    transition_speed = rated_speed * 0.5
+
+    rated_omega = (2 * np.pi * rated_speed) / 60
+    constant_power = rated_torque * rated_omega
 
     for i, r in enumerate(rpm):
 
         omega = (2 * np.pi * r) / 60
 
-        if r <= base_rpm:
+        if r <= transition_speed:
 
-            # Constant torque region
-            torque[i] = max_torque
+            # Peak torque region
+            torque[i] = peak_torque
 
-            # Power increases linearly with speed
-            power[i] = max_torque * omega
+        elif r <= rated_speed:
+
+            # Smooth transition from peak torque to rated torque
+            ratio = (r - transition_speed) / (rated_speed - transition_speed)
+
+            torque[i] = (
+                peak_torque
+                - ratio * (peak_torque - rated_torque)
+            )
 
         else:
 
             # Constant power region
-            power[i] = constant_power
+            if omega > 0:
+                torque[i] = constant_power / omega
+            else:
+                torque[i] = rated_torque
 
-            # Torque decreases with speed
-            torque[i] = constant_power / omega
+        power[i] = torque[i] * omega
 
     return rpm, torque, power
 
 
 def create_torque_curve(
-    max_rpm: float,
-    max_torque: float,
-    base_speed_ratio: float = 0.60,
+    rated_speed: float,
+    max_speed: float,
+    rated_torque: float,
+    peak_torque: float,
 ):
 
     rpm, torque, _ = generate_motor_curves(
-        max_rpm,
-        max_torque,
-        base_speed_ratio,
+        rated_speed,
+        max_speed,
+        rated_torque,
+        peak_torque,
     )
 
     fig = go.Figure()
@@ -74,16 +87,22 @@ def create_torque_curve(
     )
 
     fig.add_vline(
-        x=max_rpm * base_speed_ratio,
+        x=rated_speed,
         line_dash="dash",
-        annotation_text="Base Speed",
+        annotation_text="Rated Speed",
+    )
+
+    fig.add_vline(
+        x=max_speed,
+        line_dash="dot",
+        annotation_text="Maximum Speed",
     )
 
     fig.update_layout(
-        title="BLDC Torque-Speed Characteristic",
+        title="Motor Torque-Speed Characteristic",
         template="plotly_dark",
         height=450,
-        xaxis_title="Motor RPM",
+        xaxis_title="Motor Speed (RPM)",
         yaxis_title="Torque (Nm)",
         hovermode="x unified",
     )
@@ -92,15 +111,17 @@ def create_torque_curve(
 
 
 def create_power_curve(
-    max_rpm: float,
-    max_torque: float,
-    base_speed_ratio: float = 0.60,
+    rated_speed: float,
+    max_speed: float,
+    rated_torque: float,
+    peak_torque: float,
 ):
 
     rpm, _, power = generate_motor_curves(
-        max_rpm,
-        max_torque,
-        base_speed_ratio,
+        rated_speed,
+        max_speed,
+        rated_torque,
+        peak_torque,
     )
 
     fig = go.Figure()
@@ -116,16 +137,22 @@ def create_power_curve(
     )
 
     fig.add_vline(
-        x=max_rpm * base_speed_ratio,
+        x=rated_speed,
         line_dash="dash",
-        annotation_text="Base Speed",
+        annotation_text="Rated Speed",
+    )
+
+    fig.add_vline(
+        x=max_speed,
+        line_dash="dot",
+        annotation_text="Maximum Speed",
     )
 
     fig.update_layout(
-        title="BLDC Power-Speed Characteristic",
+        title="Motor Power-Speed Characteristic",
         template="plotly_dark",
         height=450,
-        xaxis_title="Motor RPM",
+        xaxis_title="Motor Speed (RPM)",
         yaxis_title="Power (W)",
         hovermode="x unified",
     )
