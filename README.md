@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="assets/banner.png" alt="EV Hub Motor Performance Simulator Banner">
-</p>
 
 <h1 align="center">⚡ EV Hub Motor Performance Simulator</h1>
 
@@ -13,7 +10,6 @@ Interactive engineering simulator for analysing the performance of direct-drive 
   <img src="https://img.shields.io/badge/Streamlit-Framework-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white">
   <img src="https://img.shields.io/badge/Plotly-Interactive_Charts-3F4F75?style=for-the-badge&logo=plotly&logoColor=white">
   <img src="https://img.shields.io/badge/Status-v1.0-success?style=for-the-badge">
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge">
 </p>
 
 ---
