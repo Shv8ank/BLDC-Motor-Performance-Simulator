@@ -14,6 +14,14 @@ Interactive engineering simulator for analysing the performance of direct-drive 
 
 ---
 
+## 🌐 Live Demo
+
+🚀 **Try the live application here:**
+
+[ev-motor-performance-simulator](https://ev-motor-performance-simulator.streamlit.app/)
+
+---
+
 # Overview
 
 The **EV Hub Motor Performance Simulator** is an interactive engineering application that estimates the operating characteristics of direct-drive BLDC hub motors commonly used in electric bicycles, scooters, and lightweight electric motorcycles.
